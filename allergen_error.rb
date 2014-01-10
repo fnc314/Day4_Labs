@@ -1,0 +1,4 @@
+class AllergenError < ArgumentError
+
+
+end
