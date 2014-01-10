@@ -1,3 +1,9 @@
+pizza = ["cheese", "gluten", "tomatoes"]
+pan_seared_scallops = ["scallops", "lemons", "pasta", "olive oil"]
+water = ["h", "h", "o"]
+
+require './allergen_error.rb'
+
 class Person
 
 	attr_reader :allergens
@@ -10,21 +16,24 @@ class Person
 
 
 	def eat_food(food)
-		food.each { |x| @stomach << x}
-		@stomach.each do |x| 
+		allergic = false
+		food.each do |x| 
 			if @allergens.include?(x)
+				allergic = true
+				begin 
 				puts "YUK!"
 				puts "PUKE!!!!!!"
-				puts "#{@name} is allergic to #{x}!"
-				@stomach.delete(x)
+					raise AllergenError.new(
+						"#{@name} is allergic to #{x} and cannot eat #{food}!")
+				end
+			else
+				@stomach << x
 			end
 		end
-		puts @stomach
+		puts "#{@name}'s stomach contains #{@stomach}"
 	end
 
 end
 
-class AllergenError < ArgumentError
-
-
-end
+chris = Person.new("Chris", "gluten")
+chris.eat_food(pizza)
